@@ -41,7 +41,9 @@ class network:
         
         return squared_error/len(y.flatten())
     
-    def graph_loss_history(self):
+    def graph_loss_history(self, yscale = "log"):
+
+        assert yscale in ["log", "linear"], "invalid yscale passed"
         
         plt.figure(figsize = (7,4))
         plt.style.use("ggplot")
@@ -59,6 +61,8 @@ class network:
         plt.text(self.epochs_trained*.7, y_range*.85 + min(self.loss_history),
                  f" train loss: {round(self.train_loss,4)}",
                  color = "darkgreen",)
+        
+        plt.yscale(yscale)
         
         plt.show()
                 
