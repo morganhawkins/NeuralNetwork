@@ -15,7 +15,7 @@ echo
 echo
 echo
 
-python setup.py pytests
+python setup.py pytest
 
 echo tests passed!
 echo
@@ -37,6 +37,15 @@ echo
 echo
 
 pip3 uninstall /Users/morganhawkins/Desktop/first_python_lib/dist/nnlearn-1.0-py3-none-any.whl
+
+echo
+echo
+
+echo uninstalled old library
+
+echo
+echo
+
 pip3 install /Users/morganhawkins/Desktop/first_python_lib/dist/nnlearn-1.0-py3-none-any.whl
 
 echo installed library to python
