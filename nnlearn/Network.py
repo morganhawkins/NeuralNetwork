@@ -49,7 +49,7 @@ class network:
         plt.style.use("ggplot")
         plt.plot(np.arange(self.epochs_trained), self.loss_history)
         plt.xlabel("Epoch")
-        plt.ylabel("Loss")
+        plt.ylabel(yscale + " Loss")
         plt.title("Training Loss")
 
         y_range = max(self.loss_history) - min(self.loss_history)
