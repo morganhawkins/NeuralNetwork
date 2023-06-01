@@ -12,8 +12,6 @@ from nnlearn.Helper_Functions import *
 
 class network:
     def __init__(self, layers):
-        print("Network Created!!!")
-
 
         self.layers = layers
         self.num_layers = len(layers)
@@ -153,7 +151,7 @@ class network:
         
         
     def fit(self, x, y, epochs = 10, learn_coef = .1, verbose = True):
-        
+        print("fitting!")
         
         loss_history = np.zeros(epochs)
 
