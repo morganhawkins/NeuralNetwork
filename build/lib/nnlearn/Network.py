@@ -172,7 +172,7 @@ class network:
             loss_history[epoch] = loss
             self.epochs_trained += 1
 
-            if (verbose) and (epoch%(epochs/5) == 0):
+            if (verbose) and ((epoch%(epochs/5) == 0) or (epoch == epochs - 1)):
                 print("-"*20)     
                 print(f"epoch: {self.epochs_trained} \n loss: {round(loss, 4)}")
                 
@@ -180,11 +180,6 @@ class network:
 
         self.train_time += time() - start_time
         self.train_loss = self.loss(x, y)
-        if verbose:
-            print("-"*20 + f"\nepoch: done \n loss: {round(self.loss(x, y), 4)}")
-
-        
-        
         self.loss_history = np.concatenate((self.loss_history, loss_history))
         
         
