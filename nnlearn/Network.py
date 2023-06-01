@@ -151,7 +151,7 @@ class network:
         
         
     def fit(self, x, y, epochs = 10, learn_coef = .1, verbose = True):
-        print("fitting!")
+
         
         loss_history = np.zeros(epochs)
 
