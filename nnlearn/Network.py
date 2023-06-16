@@ -58,7 +58,7 @@ class network:
                  f"ms/epoch: {round(self.train_time/self.epochs_trained*1000,3)}",
                  color = "darkgreen",)
         
-        plt.text(self.epochs_trained*.7, y_range*.85 + min(self.loss_history),
+        plt.text(self.epochs_trained*.7, y_range*.75 + min(self.loss_history),
                  f" train loss: {round(self.train_loss,4)}",
                  color = "darkgreen",)
         
@@ -189,8 +189,6 @@ class network:
         
         
             
-
-
 
 
 
