@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from scipy.special import expit as sigmoid
 from time import time
 from time import sleep
+from random import sample
 
 #importing other files
 from nnlearn.Layers import *
@@ -154,15 +155,18 @@ class network:
             i -= 1
         
         
-    def fit(self, x, y, epochs = 10, learn_coef = .1, verbose = True):
+    def minibatch_fit(self, x, y, batch_size, epochs = 10, learn_coef = .1, verbose = True):
+    
 
         
         loss_history = np.zeros(epochs)
 
         start_time = time()
         for epoch in range(epochs):
+            
+            batch_indices = sample(range(len(x)), batch_size)
 
-            for s in range(len(x)):
+            for s in batch_indices:
                 self.forward(x[s].reshape(-1,1))
                 self.backward(y[s].reshape(-1,1), learn_coef)
 
@@ -186,11 +190,12 @@ class network:
         self.train_time += time() - start_time
         self.train_loss = self.loss(x, y)
         self.loss_history = np.concatenate((self.loss_history, loss_history))
-        
+
+
+
+
         
             
-
-
 
 
 
