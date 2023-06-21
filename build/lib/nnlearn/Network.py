@@ -1,9 +1,11 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.special import expit as sigmoid
+
 from time import time
-from time import sleep
 from random import sample
+
+
 
 #importing other files
 from nnlearn.Layers import *

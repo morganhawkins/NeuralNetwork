@@ -1,6 +1,7 @@
 
 import numpy as np
 from scipy.special import expit as sigmoid
+from numba import njit
 
 class connected_layer:
     def __init__(self, num_neurons, prev_neurons):
@@ -45,6 +46,7 @@ class activation_layer:
         self.size = size
         self.prev_size = size
     
+
     #gradient of output with respect to input
     #will always be diagonal matrix since layer is not "fully" connected
     def gradient(self):
