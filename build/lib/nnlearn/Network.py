@@ -61,7 +61,7 @@ class network:
                  f"ms/epoch: {round(self.train_time/self.epochs_trained*1000,3)}",
                  color = "darkgreen",)
         
-        plt.text(self.epochs_trained*.7, y_range*.75 + min(self.loss_history),
+        plt.text(self.epochs_trained*.7, y_range*.70 + min(self.loss_history),
                  f" train loss: {round(self.train_loss,4)}",
                  color = "darkgreen",)
         
@@ -142,17 +142,10 @@ class network:
                 self.layers[i].bias_mat_update = self.layers[i].bias_mat_update - (g_cost_bias*learn_coef)
                 
                 
+            #updating cost to layer nodes gradient
+            g_cost_layer = self.layers[i].gradient_to_prev @ g_cost_layer
             
-            try:
-            
-                g_cost_layer = self.layers[i].gradient_to_prev @ g_cost_layer
-            
-            except:
-                print(f'backwards -- layer: {i}')
-                
-                print(self.layers[i].gradient_to_prev)
-            
-                print(g_cost_layer)
+ 
             
             i -= 1
         
