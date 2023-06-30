@@ -30,11 +30,16 @@ class network:
         self.verify()
     
     def reset_update_mats(self):
+        """
+        sets the parameter update mats for each layers to 0
+        """
+
         for layer in self.layers:
             if type(layer) == connected_layer:
                 layer.weight_mat_update = abs(layer.weight_mat_update*0)
                 layer.bias_mat_update = abs(layer.bias_mat_update*0)
                 
+
     def loss(self, x, y):
         assert x.shape[0] == y.shape[0], "x and y incompatible shapes"
         
@@ -45,6 +50,10 @@ class network:
         return squared_error/len(y.flatten())
     
     def graph_loss_history(self, yscale = "log"):
+        """
+        plots the train loss against epcohs
+        provides info on train speed
+        """
 
         assert yscale in ["log", "linear"], "invalid yscale passed"
         
@@ -71,11 +80,21 @@ class network:
                 
         
     def verify(self):
+        """
+        verifies that the network's layers match input/output shapes
+
+        """
+
         for i in range(1,len(self.layers)):
             assert self.layers[i-1].size == self.layers[i].prev_size, "invalid network"
             
             
     def verify_sample(self, x, y):
+        """
+        verifies that a sample is valid for the network
+
+        """
+
         assert len(x) == len(y), "x and y havent different numebr of samples"
         
         for i in range(len(x)):
@@ -84,6 +103,10 @@ class network:
         
         
     def predict(self, inp):
+        """
+        pushes sample through network and return output of final layer
+
+        """
         inp = inp.reshape(self.input_size,1)
         assert inp.shape == (self.input_size, 1), "wrong input size"
         
@@ -95,16 +118,32 @@ class network:
     
     
     def print_structure(self):
+        """
+        prints the structure of the network and number of parameters
+
+        """
+        total_params = 0
         for i,layer in enumerate(self.layers[::-1]):
             print("-"*45)
             print(type(layer))
             print(f"  layer: {self.num_layers-i-1}/{self.num_layers-1}")
             print(f"neurons: {layer.size}")
             print(f" prev n: {layer.prev_size}")
+            print(f" params: {layer.params}")
             print()
+            total_params += layer.params
+            
+        print("-" * 45, f"\ntotal params: {total_params}")
+        
    
         
     def forward(self, x):
+        """
+        pushes sample through the network, updating the "out" attributes of each layer and it's gradient to it's parameters
+
+        """
+
+
         assert x.shape == (self.input_size,1)
         
         for layer in self.layers:
@@ -112,15 +151,19 @@ class network:
             
             
     def backward(self, y, learn_coef = 1):
+        """
+        calculates the "weight_mat_update" and "bias_mat_update" attributes of each layer
         
+        """
+
         g_cost_layer = np.array([2*(self.layers[-1].out[i] - y[i]) for i in range(self.output_size)])
         
         
         #Looping through layers: going from end --> start 
         
-        i = len(self.layers)-1
+        i = len(self.layers) - 1
         
-        while i>0:
+        while i > 0:
              
             #if it's a connected layer we want to update its weights and biases
             if type(self.layers[i]) == connected_layer:
@@ -150,13 +193,34 @@ class network:
             i -= 1
         
         
-    def minibatch_fit(self, x, y, batch_size, epochs = 10, learn_coef = .1, verbose = True):
-    
-
+    def minibatch_fit(self, x, y, batch_size = None, epochs = 10, learn_coef = .1, verbose = True):
         
+        """
+        Function to train the network through minibatch SGD. 
+        
+        x: np array of size (n,p) - input array
+        y: np array of size (n,o) - output array
+        batch_size: int in [0,n]  - number of samples used to calculate gradient at each epoch
+        epcohs: int in [1, inf)   - number of epochs used in training
+        learn_coef: doub in [0,1] - coeficient to adjust gradient by
+        verbose: T,F              - whether to print output
+
+        """
+
+
+        assert (type(x) == np.ndarray) and (type(y) == np.ndarray), "X and Y must both be numpy arrays"
+
+        assert x.shape[0] == y.shape[0], f"X and Y have incomaptible shapes {x.shape} {y.shape}"
+
+        assert (learn_coef >= 0) and (learn_coef <= 1), f"learn coef must be in [0,1]. learn_coef passed: {learn_coef}"
+
+        if batch_size == None: batch_size = x.shape[0] 
+
+
         loss_history = np.zeros(epochs)
 
         start_time = time()
+
         for epoch in range(epochs):
             
             batch_indices = sample(range(len(x)), batch_size)

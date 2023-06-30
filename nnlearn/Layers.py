@@ -23,7 +23,7 @@ class connected_layer:
         self.bias_mat = np.zeros((num_neurons, 1))
         self.bias_mat_update = np.zeros((num_neurons, 1))
         
-    
+        self.params = num_neurons  * (prev_neurons + 1)
     
     #pushes sample through layer and remembers output
     #also calcualtes gradient to previous layer
@@ -45,6 +45,7 @@ class activation_layer:
     def __init__(self, size):
         self.size = size
         self.prev_size = size
+        self.params = 0
     
 
     #gradient of output with respect to input
@@ -69,6 +70,7 @@ class input_layer:
         self.size = size
         self.prev_size = None
         self.gradient_to_prev = None
+        self.params = 0
         
     def gradient(self):
         return None
