@@ -156,6 +156,8 @@ class network:
         
         """
 
+        learn_coef
+
         g_cost_layer = np.array([2*(self.layers[-1].out[i] - y[i]) for i in range(self.output_size)])
         
         
@@ -193,7 +195,7 @@ class network:
             i -= 1
         
         
-    def minibatch_fit(self, x, y, batch_size = None, epochs = 10, learn_coef = .1, verbose = True):
+    def minibatch_fit(self, x, y, batch_size = None, epochs = 10, learn_coef_bounds = (1, .001), verbose = True):
         
         """
         Function to train the network through minibatch SGD. 
@@ -202,7 +204,7 @@ class network:
         y: np array of size (n,o) - output array
         batch_size: int in [0,n]  - number of samples used to calculate gradient at each epoch
         epcohs: int in [1, inf)   - number of epochs used in training
-        learn_coef: doub in [0,1] - coeficient to adjust gradient by
+        learn_coef_bounds: tuple  - range over which learn rate decends linearly
         verbose: T,F              - whether to print output
 
         """
@@ -213,7 +215,7 @@ class network:
 
         assert x.shape[0] == y.shape[0], f"X and Y have incomaptible shapes {x.shape} {y.shape}"
 
-        assert (learn_coef >= 0) and (learn_coef <= 1), f"learn coef must be in [0,1]. learn_coef passed: {learn_coef}"
+        assert (learn_coef_bounds[0] >= learn_coef_bounds[1]), f"Invalid bounds, 1st bound must be >= 2nd bound"
 
         if batch_size == None: batch_size = x.shape[0] 
 
@@ -221,6 +223,8 @@ class network:
         loss_history = np.zeros(epochs)
 
         start_time = time()
+
+        learn_rates = np.linspace(learn_coef_bounds[0], learn_coef_bounds[1], epochs)
 
         for epoch in range(epochs):
 
@@ -237,7 +241,7 @@ class network:
 
             for i,s in enumerate(batch_indices):
                 self.forward(x[s].reshape(-1,1))
-                self.backward(y[s].reshape(-1,1), learn_coef)
+                self.backward(y[s].reshape(-1,1), learn_coef = learn_rates[epoch])
 
                 # check_end = time()
                 # print(f"batch {i} fb:{check_end - check_start}")
@@ -245,8 +249,8 @@ class network:
 
             for layer in self.layers: 
                 if type(layer) == connected_layer:
-                    layer.weight_mat = layer.weight_mat + (layer.weight_mat_update/len(x))
-                    layer.bias_mat = layer.bias_mat + (layer.bias_mat_update/len(x))
+                    layer.weight_mat = layer.weight_mat + (layer.weight_mat_update/batch_size)
+                    layer.bias_mat = layer.bias_mat + (layer.bias_mat_update/batch_size)
 
             # check_end = time()
             # print(f"update params:{check_end - check_start}")
@@ -262,7 +266,7 @@ class network:
             
             self.epochs_trained += 1
 
-            if (verbose) and ((epoch%(epochs/5) == 0) or (epoch == epochs - 1)):
+            if (verbose) and ((epoch%(round(epochs/5)) == 0) or (epoch == epochs - 1)):
                 loss = self.loss(x, y)
                 print("-"*20)     
                 print(f"epoch: {self.epochs_trained} \n loss: {round(loss, 4)}")
