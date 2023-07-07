@@ -1,4 +1,8 @@
 import numpy as np
+from numba import njit
+
+
+from scipy.special import expit as sigmoid
 
 #function to do nothing -- helps clean code use din debugging
 def silent(a = None):
@@ -11,3 +15,13 @@ def shuffle_together(v_1, v_2):
     
     perm = np.random.permutation(len(v_1))
     return v_1[perm], v_2[perm]
+
+
+@njit
+def relu(x):
+    return np.maximum(0,x)
+
+
+@njit
+def d_relu(output):
+    return 1 * (output > 0)

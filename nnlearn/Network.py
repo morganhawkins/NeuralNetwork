@@ -49,7 +49,7 @@ class network:
         
         return squared_error/len(y.flatten())
     
-    def graph_loss_history(self, yscale = "log"):
+    def graph_loss_history(self, yscale = "log", show_plot = False, show_text = True):
         """
         plots the train loss against epcohs
         provides info on train speed
@@ -57,26 +57,33 @@ class network:
 
         assert yscale in ["log", "linear"], "invalid yscale passed"
         
-        plt.figure(figsize = (7,4))
+        if not show_plot: plt.figure(figsize = (7,4))
         plt.style.use("ggplot")
-        plt.plot(np.arange(self.epochs_trained), self.loss_history)
+
+        plottable_indices = self.loss_history > 0
+        print(sum(plottable_indices))
+        plt.plot(np.arange(self.epochs_trained)[plottable_indices], self.loss_history[plottable_indices])
+
+
         plt.xlabel("Epoch")
         plt.ylabel(yscale + " Loss")
         plt.title("Training Loss")
 
         y_range = max(self.loss_history) - min(self.loss_history)
 
-        plt.text(self.epochs_trained*.7, y_range*.95 + min(self.loss_history),
-                 f"ms/epoch: {round(self.train_time/self.epochs_trained*1000,3)}",
-                 color = "darkgreen",)
-        
-        plt.text(self.epochs_trained*.7, y_range*.70 + min(self.loss_history),
-                 f" train loss: {round(self.train_loss,4)}",
-                 color = "darkgreen",)
+        if show_text:
+            plt.text(self.epochs_trained*.7, y_range*.95 + min(self.loss_history),
+                    f"ms/epoch: {round(self.train_time/self.epochs_trained*1000,3)}",
+                    color = "darkgreen",)
+            
+            plt.text(self.epochs_trained*.7, y_range*.70 + min(self.loss_history),
+                    f" train loss: {round(self.train_loss,4)}",
+                    color = "darkgreen",)
         
         plt.yscale(yscale)
+        plt.ylim(.0001, max(self.loss_history))
         
-        plt.show()
+        if show_plot: plt.show()
                 
         
     def verify(self):

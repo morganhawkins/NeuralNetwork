@@ -33,12 +33,12 @@ class nn_image_compresser():
             [input_layer(size = 2)] +
             
             [connected_layer(num_neurons = layer_width, prev_neurons = 2),
-             activation_layer(layer_width)] +
+             relu_activation_layer(layer_width)] +
             
                 
 
             [connected_layer(num_neurons = layer_width, prev_neurons = layer_width),
-             activation_layer(layer_width)] * (hidden_layers - 1) +
+             relu_activation_layer(layer_width)] * (hidden_layers - 1) +
             
             
             [connected_layer(num_neurons = 1, prev_neurons = layer_width)]

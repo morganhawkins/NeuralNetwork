@@ -1,6 +1,6 @@
 
 import numpy as np
-from scipy.special import expit as sigmoid
+from nnlearn.Helper_Functions import *
 from numba import njit
 
 class connected_layer:
@@ -43,18 +43,37 @@ class connected_layer:
     
 class activation_layer:
     def __init__(self, size):
+        
         self.size = size
         self.prev_size = size
         self.params = 0
     
-
-    #gradient of output with respect to input
-    #will always be diagonal matrix since layer is not "fully" connected
-    def gradient(self):
-        return np.diag(self.out.flatten()*(1-self.out.flatten()))
     
-    #pushes sample through layer and remembers output
-    #also calcualtes gradient to previous layer
+class relu_activation_layer(activation_layer):
+
+    def gradient(self):
+        return np.diag(d_relu(self.out).flatten())
+    
+
+    def forward(self, x):
+        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
+        
+        self.out = relu(x)
+        self.gradient_to_prev = self.gradient()
+        
+        return self.out
+    
+
+
+class sigmoid_activation_layer(activation_layer):
+    
+    def gradient(self):
+
+        flat_out = self.out.flatten()
+
+        return np.diag(flat_out*(1-flat_out))
+    
+
     def forward(self, x):
         assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
         
@@ -62,8 +81,9 @@ class activation_layer:
         self.gradient_to_prev = self.gradient()
         
         return self.out
+
     
-    
+
     
 class input_layer:
     def __init__(self, size):
