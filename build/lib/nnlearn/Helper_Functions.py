@@ -25,3 +25,14 @@ def relu(x):
 @njit
 def d_relu(output):
     return 1 * (output > 0)
+
+
+
+@njit
+def leaky_relu(x):
+    return np.where(x > 0, x, 0.01*x)    
+
+
+@njit
+def d_leaky_relu(output):
+    return np.where(output > 0, 1, 0.01)     

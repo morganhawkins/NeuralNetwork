@@ -24,7 +24,7 @@ def image_to_tab(image):
 
 
 class nn_image_compresser():
-    def __init__(self, hidden_layers = 2, layer_width = 7):
+    def __init__(self, hidden_layers = 2, layer_width = 7, activation = sigmoid_activation_layer):
 
         assert hidden_layers >= 1, "must have at least 1 hidden layer"
         assert layer_width >= 1, "layer width must be at least 1"
@@ -33,12 +33,12 @@ class nn_image_compresser():
             [input_layer(size = 2)] +
             
             [connected_layer(num_neurons = layer_width, prev_neurons = 2),
-             sigmoid_activation_layer(layer_width)] +
+             activation(layer_width)] +
             
                 
 
             [connected_layer(num_neurons = layer_width, prev_neurons = layer_width),
-             sigmoid_activation_layer(layer_width)] * (hidden_layers - 1) +
+             activation(layer_width)] * (hidden_layers - 1) +
             
             
             [connected_layer(num_neurons = 1, prev_neurons = layer_width)]
