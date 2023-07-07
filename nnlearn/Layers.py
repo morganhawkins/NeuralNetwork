@@ -64,7 +64,7 @@ class relu_activation_layer(activation_layer):
         return self.out
     
 
-class leaky_relu__activation_layer(activation_layer):
+class leaky_relu_activation_layer(activation_layer):
 
     def gradient(self):
         return np.diag(d_leaky_relu(self.out).flatten())

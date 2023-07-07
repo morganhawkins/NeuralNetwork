@@ -24,7 +24,7 @@ def image_to_tab(image):
 
 
 class nn_image_compresser():
-    def __init__(self, hidden_layers = 2, layer_width = 7, activation = sigmoid_activation_layer):
+    def __init__(self, hidden_layers = 2, layer_width = 7, activation = leaky_relu_activation_layer):
 
         assert hidden_layers >= 1, "must have at least 1 hidden layer"
         assert layer_width >= 1, "layer width must be at least 1"
