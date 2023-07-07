@@ -33,12 +33,12 @@ class nn_image_compresser():
             [input_layer(size = 2)] +
             
             [connected_layer(num_neurons = layer_width, prev_neurons = 2),
-             relu_activation_layer(layer_width)] +
+             sigmoid_activation_layer(layer_width)] +
             
                 
 
             [connected_layer(num_neurons = layer_width, prev_neurons = layer_width),
-             relu_activation_layer(layer_width)] * (hidden_layers - 1) +
+             sigmoid_activation_layer(layer_width)] * (hidden_layers - 1) +
             
             
             [connected_layer(num_neurons = 1, prev_neurons = layer_width)]
@@ -50,11 +50,11 @@ class nn_image_compresser():
 
 
     
-    def fit(self, image, batch_size = None, epochs = 500, learn_coef_bounds = (1,.001), verbose = True):
+    def fit(self, image, batch_size = None, epochs = 500, learn_coef = .2, verbose = True):
 
         x, y = image_to_tab(image)
     
-        self.network.minibatch_fit(x, y, batch_size = batch_size, epochs = epochs, learn_coef_bounds = learn_coef_bounds, verbose = verbose)
+        self.network.minibatch_fit(x, y, batch_size = batch_size, epochs = epochs, learn_coef = learn_coef, verbose = verbose)
 
 
 

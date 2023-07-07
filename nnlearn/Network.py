@@ -57,11 +57,12 @@ class network:
 
         assert yscale in ["log", "linear"], "invalid yscale passed"
         
-        if not show_plot: plt.figure(figsize = (7,4))
+        plt.figure(figsize = (7,4))
+
         plt.style.use("ggplot")
 
         plottable_indices = self.loss_history > 0
-        print(sum(plottable_indices))
+
         plt.plot(np.arange(self.epochs_trained)[plottable_indices], self.loss_history[plottable_indices])
 
 
@@ -81,7 +82,7 @@ class network:
                     color = "darkgreen",)
         
         plt.yscale(yscale)
-        plt.ylim(.0001, max(self.loss_history))
+        # plt.ylim(.0001, max(self.loss_history))
         
         if show_plot: plt.show()
                 
@@ -202,7 +203,7 @@ class network:
             i -= 1
         
         
-    def minibatch_fit(self, x, y, batch_size = None, epochs = 10, learn_coef_bounds = (1, .001), verbose = True):
+    def minibatch_fit(self, x, y, batch_size = None, epochs = 10, learn_coef = .2, verbose = True):
         
         """
         Function to train the network through minibatch SGD. 
@@ -222,7 +223,7 @@ class network:
 
         assert x.shape[0] == y.shape[0], f"X and Y have incomaptible shapes {x.shape} {y.shape}"
 
-        assert (learn_coef_bounds[0] >= learn_coef_bounds[1]), f"Invalid bounds, 1st bound must be >= 2nd bound"
+        assert (learn_coef > 0), f"learn_coef must be > 0"
 
         if batch_size == None: batch_size = x.shape[0] 
 
@@ -231,7 +232,6 @@ class network:
 
         start_time = time()
 
-        learn_rates = np.linspace(learn_coef_bounds[0], learn_coef_bounds[1], epochs)
 
         for epoch in range(epochs):
 
@@ -248,7 +248,7 @@ class network:
 
             for i,s in enumerate(batch_indices):
                 self.forward(x[s].reshape(-1,1))
-                self.backward(y[s].reshape(-1,1), learn_coef = learn_rates[epoch])
+                self.backward(y[s].reshape(-1,1), learn_coef = learn_coef)
 
                 # check_end = time()
                 # print(f"batch {i} fb:{check_end - check_start}")
