@@ -2,6 +2,9 @@
 from nnlearn.Network import *
 from matplotlib import pyplot as plt
 from matplotlib import image
+from threading import Thread
+from multiprocessing import Process
+
 
 
 
@@ -55,6 +58,22 @@ class nn_image_compresser():
         x, y = image_to_tab(image)
     
         self.network.minibatch_fit(x, y, batch_size = batch_size, epochs = epochs, learn_coef = learn_coef, verbose = verbose)
+
+
+    def simul_fit(self, image, batch_size = None, epochs = 500, learn_coef = .2, threads = 3):
+
+        workers = []
+
+        for i in range(threads):
+
+            thread = Process( target = self.fit(image, batch_size = batch_size, epochs = epochs, verbose = False, learn_coef = learn_coef) )
+            workers.append(thread)
+
+
+        for wrkr in workers:
+            wrkr.run()
+
+        print("complete")
 
 
 
