@@ -207,6 +207,7 @@ class network:
 
         """
 
+        self.reset_update_mats()
 
         assert (type(x) == np.ndarray) and (type(y) == np.ndarray), "X and Y must both be numpy arrays"
 
@@ -222,27 +223,63 @@ class network:
         start_time = time()
 
         for epoch in range(epochs):
+
+            epoch_start = time()
             
+            check_start = time()
+
             batch_indices = sample(range(len(x)), batch_size)
 
-            for s in batch_indices:
+            # check_end = time()
+            # print(f"sample:{check_end - check_start}")
+            # check_start = time()
+
+
+            for i,s in enumerate(batch_indices):
                 self.forward(x[s].reshape(-1,1))
                 self.backward(y[s].reshape(-1,1), learn_coef)
+
+                # check_end = time()
+                # print(f"batch {i} fb:{check_end - check_start}")
+                # check_start = time()
 
             for layer in self.layers: 
                 if type(layer) == connected_layer:
                     layer.weight_mat = layer.weight_mat + (layer.weight_mat_update/len(x))
                     layer.bias_mat = layer.bias_mat + (layer.bias_mat_update/len(x))
 
+            # check_end = time()
+            # print(f"update params:{check_end - check_start}")
+            # check_start = time()
+
             self.reset_update_mats()
 
-            loss = self.loss(x, y)
-            loss_history[epoch] = loss
+            # check_end = time()
+            # print(f"reset update mats:{check_end - check_start}")
+            # check_start = time()
+
+
+            
             self.epochs_trained += 1
 
             if (verbose) and ((epoch%(epochs/5) == 0) or (epoch == epochs - 1)):
+                loss = self.loss(x, y)
                 print("-"*20)     
                 print(f"epoch: {self.epochs_trained} \n loss: {round(loss, 4)}")
+            else:
+                loss = 0
+
+
+            loss_history[epoch] = loss
+            
+
+            # check_end = time()
+            # print(f"collect data: {check_end - check_start}")
+            # check_start = time()
+
+
+            # print(f"full epoch: {time() - epoch_start}")
+            # print("\n" , "-"*45, "\n")
                 
             
 
