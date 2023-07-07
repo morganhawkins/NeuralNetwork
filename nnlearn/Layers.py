@@ -64,6 +64,21 @@ class relu_activation_layer(activation_layer):
         return self.out
     
 
+class leaky_relu__activation_layer(activation_layer):
+
+    def gradient(self):
+        return np.diag(d_leaky_relu(self.out).flatten())
+    
+
+    def forward(self, x):
+        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
+        
+        self.out = leaky_relu(x)
+        self.gradient_to_prev = self.gradient()
+        
+        return self.out
+    
+
 
 class sigmoid_activation_layer(activation_layer):
     
