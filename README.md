@@ -1,4 +1,6 @@
-My implementation of a neural network in NumPy
+
+
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
 
 
 
