@@ -9,6 +9,10 @@ from multiprocessing import Process
 
 
 def image_to_tab(image):
+    """
+    Converts an image in form of 2d array into a tabular data set if coordinates and brighnesses
+    
+    """
     shape = image.shape
     x = []
     y = []
@@ -27,6 +31,11 @@ def image_to_tab(image):
 
 
 class nn_image_compresser():
+    """
+    Class that allows for easy creationg and fitting of an image compresser
+
+    """
+
     def __init__(self, hidden_layers = 2, layer_width = 7, activation = leaky_relu_activation_layer):
 
         assert hidden_layers >= 1, "must have at least 1 hidden layer"
@@ -54,6 +63,9 @@ class nn_image_compresser():
 
     
     def fit(self, image, batch_size = None, epochs = 500, learn_coef = .2, verbose = True):
+        """
+        Fits the network to an image
+        """
 
         x, y = image_to_tab(image)
     
@@ -61,6 +73,13 @@ class nn_image_compresser():
 
 
     def simul_fit(self, image, batch_size = None, epochs = 500, learn_coef = .2, threads = 3):
+        """
+        NOT WORKING YET - works but no speed increase yet
+
+        Fits the network to an image. Uses multiprocessing to speed up training
+        
+        """
+
 
         workers = []
 
@@ -81,7 +100,14 @@ class nn_image_compresser():
 
 
     def create_image(self, width, height = None):
-        
+        """
+        Recreates the image used to fit the model with dimensions given
+
+        Allows for resizing and distortion of image
+
+        """
+
+
         if height == None: height = width
 
         predicted_image = np.zeros((width,height))
