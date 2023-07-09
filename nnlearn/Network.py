@@ -241,33 +241,18 @@ class network:
 
             batch_indices = sample(range(len(x)), batch_size)
 
-            # check_end = time()
-            # print(f"sample:{check_end - check_start}")
-            # check_start = time()
-
-
             for i,s in enumerate(batch_indices):
                 self.forward(x[s].reshape(-1,1))
                 self.backward(y[s].reshape(-1,1), learn_coef = learn_coef)
 
-                # check_end = time()
-                # print(f"batch {i} fb:{check_end - check_start}")
-                # check_start = time()
 
             for layer in self.layers: 
                 if type(layer) == connected_layer:
                     layer.weight_mat = layer.weight_mat + (layer.weight_mat_update/batch_size)
                     layer.bias_mat = layer.bias_mat + (layer.bias_mat_update/batch_size)
 
-            # check_end = time()
-            # print(f"update params:{check_end - check_start}")
-            # check_start = time()
 
             self.reset_update_mats()
-
-            # check_end = time()
-            # print(f"reset update mats:{check_end - check_start}")
-            # check_start = time()
 
 
             
@@ -282,16 +267,6 @@ class network:
 
 
             loss_history[epoch] = loss
-            
-
-            # check_end = time()
-            # print(f"collect data: {check_end - check_start}")
-            # check_start = time()
-
-
-            # print(f"full epoch: {time() - epoch_start}")
-            # print("\n" , "-"*45, "\n")
-                
             
 
         self.train_time += time() - start_time
