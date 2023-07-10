@@ -31,7 +31,7 @@ This is the original image that we would like our network to be able to transfor
 <img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/digit_3.png " width="150" height="150" />
 
 
-Images play in unison to show how different networks converge. The left image shows a compresser with 2 hidden connected layers and 2 hidden activation layers. Activation function used is the Leaky ReLu. The Right image is an identical network, but sigmoid activations are used. We can see here that the network using Leaky ReLu activations converges must faster.
+Images play in unison to show how different networks converge. All three images show identical networks with different activation functions. We can see that the leaky ReLu sppears to converge the fastest, but the model with a mix of leaky ReLu and sigmoidal activation layers seems to be able to recreate the image most accurately.  
 
 &emsp;&emsp; Leaky ReLu &emsp;&emsp;&emsp;&emsp;&nbsp;  Sigmoid  &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;    Mixed
 
