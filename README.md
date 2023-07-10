@@ -1,6 +1,6 @@
 # Overview
 
-This library serves as a framework for creating artificial neural networks from a variety of connected and activation layers. Everything primarily utilizes the numpy library. No pytorch or tensorflow is used, but functions are compiled when possibloe using the numba library. This project was created primarily for my understanding of neural networks.
+This library serves as a framework for creating artificial neural networks from a variety of connected and activation layers. Everything primarily utilizes the numpy library. No pytorch or tensorflow is used, but functions are compiled when possibloe using the numba library. This project was created for my understanding of neural networks.
 
 ### Network Classes
 
