@@ -33,9 +33,9 @@ This is the original image that we would like our network to be able to transfor
 
 Images play in unison to show how different networks converge. The left image shows a compresser with 2 hidden connected layers and 2 hidden activation layers. Activation function used is the Leaky ReLu. The Right image is an identical network, but sigmoid activations are used. We can see here that the network using Leaky ReLu activations converges must faster.
 
-&emsp;&emsp; Leaky ReLu &emsp;&emsp;&emsp;&emsp;&nbsp;  Sigmoid
+&emsp;&emsp; Leaky ReLu &emsp;&emsp;&emsp;&emsp;&nbsp;  Sigmoid  &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;    Mixed
 
-<img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/leaky_relu_recreation_looping.gif " width="150" height="150" /><img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/sigmoid_receation_looping.gif " width="150" height="150" />
+<img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/leaky_relu_recreation_looping.gif " width="150" height="150" /><img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/sigmoid_receation_looping.gif " width="150" height="150" /><img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/mixed_recreation_looping.gif " width="150" height="150" />
 
 
 
