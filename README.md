@@ -21,7 +21,7 @@ This library serves as a framework for creating artificial neural networks from 
 
 # Visualizations
 
-### Visualizing the training of 2 Compressers on a picture of the digit 3. 
+### Visualizing the training of 3 Compressers with different activation functions on a picture of the digit 3.
 
 
 This is the original image that we would like our network to be able to transform into an image of higher resolution.
