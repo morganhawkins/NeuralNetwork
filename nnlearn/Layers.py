@@ -56,7 +56,7 @@ class relu_activation_layer(activation_layer):
     
 
     def forward(self, x):
-        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
+        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed instead of ({self.size},1)"
         
         self.out = relu(x)
         self.gradient_to_prev = self.gradient()
@@ -71,7 +71,7 @@ class leaky_relu_activation_layer(activation_layer):
     
 
     def forward(self, x):
-        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
+        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed instead of ({self.size},1)"
         
         self.out = leaky_relu(x)
         self.gradient_to_prev = self.gradient()
@@ -90,7 +90,7 @@ class sigmoid_activation_layer(activation_layer):
     
 
     def forward(self, x):
-        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed"
+        assert x.shape == (self.size, 1), f"input and layer size incompatible, {x.shape} passed instead of ({self.size},1)"
         
         self.out = sigmoid(x)
         self.gradient_to_prev = self.gradient()
@@ -117,5 +117,35 @@ class input_layer:
         self.out = x
         
         return x
+    
+class softmax_layer:
+    def __init__(self, size):
+        self.size = size
+
+    def forward(self, x):
+        """
+        applies softmax function to output
+        """
+
+        x = np.exp(x)
+
+        denom = x.sum()
+
+        self.out = x/denom
+
+        return self.out
+    
+    
+    def gradient(self):
+
+        assert False, "Gradient not implemente for softmax layer yet"
+
+
+
+
+
+
+
+        
         
         

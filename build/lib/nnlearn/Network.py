@@ -10,11 +10,12 @@ from random import sample
 #importing other files
 from nnlearn.Layers import *
 from nnlearn.Helper_Functions import *
+from nnlearn.Loss_Functions import *
 
 #Creating NN object
 
 class network:
-    def __init__(self, layers):
+    def __init__(self, layers, loss_function = mse_loss):
 
         self.layers = layers
         self.num_layers = len(layers)
@@ -27,6 +28,7 @@ class network:
         self.loss_history = np.empty(0)
         self.train_time = 0
         
+        self.loss_function = loss_function()
         self.verify()
     
     def reset_update_mats(self):
@@ -42,12 +44,17 @@ class network:
 
     def loss(self, x, y):
         assert x.shape[0] == y.shape[0], "x and y incompatible shapes"
+
+        predictions = np.zeros((len(x), self.output_size))
         
-        squared_error = 0
+
         for i in range(len(x)):
-            squared_error += sum((self.predict(x[i]).flatten() - y[i])**2)
-        
-        return squared_error/len(y.flatten())
+            predictions[i,:] = self.predict(x[i,:]).flatten()
+
+        # assert y == predictions.shape, f"invalid shape between predictions and target {predictions.shape} {y.shape}"
+
+
+        return self.loss_function.loss(prediction = predictions, target = y)
     
     def graph_loss_history(self, yscale = "log", show_plot = False, show_text = True):
         """
@@ -119,7 +126,6 @@ class network:
         assert inp.shape == (self.input_size, 1), "wrong input size"
         
         for i in range(self.num_layers):
-
             inp = self.layers[i].forward(inp)
             
         return inp
@@ -143,7 +149,6 @@ class network:
             
         print("-" * 45, f"\ntotal params: {total_params}")
         
-   
         
     def forward(self, x):
         """
@@ -164,9 +169,10 @@ class network:
         
         """
 
-        learn_coef
+        # # g_cost_layer = np.array([2*(self.layers[-1].out[i] - y[i]) for i in range(self.output_size)])
+        # g_cost_layer = self.loss_function.gradient(self.layers[-1].out, y)
 
-        g_cost_layer = np.array([2*(self.layers[-1].out[i] - y[i]) for i in range(self.output_size)])
+        upstream_gradient = self.loss_function.gradient(self.layers[-1].out, y)
         
         
         #Looping through layers: going from end --> start 
@@ -182,21 +188,21 @@ class network:
 
                 g_layer_weights = np.array([self.layers[i-1].out.flatten() for c in range(self.layers[i].size)])
                 
-                g_cost_weights = np.diag(g_cost_layer.flatten()) @ g_layer_weights
+                g_cost_weights = np.diag(upstream_gradient.flatten()) @ g_layer_weights
                 
             
-                self.layers[i].weight_mat_update = self.layers[i].weight_mat_update - (g_cost_weights*learn_coef)
+                self.layers[i].weight_mat_update = self.layers[i].weight_mat_update - (g_cost_weights * learn_coef)
                 
                 
                 #updating biasses
                 
-                g_cost_bias = g_cost_layer
+                g_cost_bias = upstream_gradient
                 
                 self.layers[i].bias_mat_update = self.layers[i].bias_mat_update - (g_cost_bias*learn_coef)
                 
                 
             #updating cost to layer nodes gradient
-            g_cost_layer = self.layers[i].gradient_to_prev @ g_cost_layer
+            upstream_gradient = self.layers[i].gradient_to_prev @ upstream_gradient
             
  
             
@@ -223,10 +229,13 @@ class network:
 
         assert x.shape[0] == y.shape[0], f"X and Y have incomaptible shapes {x.shape} {y.shape}"
 
-        assert (learn_coef > 0), f"learn_coef must be > 0"
+        assert (learn_coef > 0), "learn_coef must be > 0"
+
+        if len(x.shape) == 1: x = x.reshape(-1,1)
+        if len(y.shape) == 1: y = y.reshape(-1,1)
+
 
         if batch_size == None: batch_size = x.shape[0] 
-
 
         loss_history = np.zeros(epochs)
 
@@ -241,39 +250,24 @@ class network:
 
             batch_indices = sample(range(len(x)), batch_size)
 
-            # check_end = time()
-            # print(f"sample:{check_end - check_start}")
-            # check_start = time()
-
-
             for i,s in enumerate(batch_indices):
                 self.forward(x[s].reshape(-1,1))
                 self.backward(y[s].reshape(-1,1), learn_coef = learn_coef)
 
-                # check_end = time()
-                # print(f"batch {i} fb:{check_end - check_start}")
-                # check_start = time()
 
             for layer in self.layers: 
                 if type(layer) == connected_layer:
                     layer.weight_mat = layer.weight_mat + (layer.weight_mat_update/batch_size)
                     layer.bias_mat = layer.bias_mat + (layer.bias_mat_update/batch_size)
 
-            # check_end = time()
-            # print(f"update params:{check_end - check_start}")
-            # check_start = time()
 
             self.reset_update_mats()
-
-            # check_end = time()
-            # print(f"reset update mats:{check_end - check_start}")
-            # check_start = time()
 
 
             
             self.epochs_trained += 1
 
-            if (verbose) and ((epoch%(round(epochs/5)) == 0) or (epoch == epochs - 1)):
+            if (verbose) and ((epoch % (round(epochs/5)) == 0) or (epoch == epochs - 1)):
                 loss = self.loss(x, y)
                 print("-"*20)     
                 print(f"epoch: {self.epochs_trained} \n loss: {round(loss, 4)}")
@@ -282,16 +276,6 @@ class network:
 
 
             loss_history[epoch] = loss
-            
-
-            # check_end = time()
-            # print(f"collect data: {check_end - check_start}")
-            # check_start = time()
-
-
-            # print(f"full epoch: {time() - epoch_start}")
-            # print("\n" , "-"*45, "\n")
-                
             
 
         self.train_time += time() - start_time

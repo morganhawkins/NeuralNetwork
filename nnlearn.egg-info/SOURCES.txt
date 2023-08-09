@@ -3,6 +3,7 @@ setup.py
 nnlearn/Compress.py
 nnlearn/Helper_Functions.py
 nnlearn/Layers.py
+nnlearn/Loss_Functions.py
 nnlearn/Network.py
 nnlearn/__init__.py
 nnlearn.egg-info/PKG-INFO
