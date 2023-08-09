@@ -1,6 +1,6 @@
 # Overview
 
-This library serves as a framework for creating artificial neural networks from a variety of connected and activation layers. Everything primarily utilizes the numpy library. No pytorch or tensorflow is used, but functions are compiled when possibloe using the numba library. This project was created primarily for my understanding of neural networks.
+This library serves as a framework for creating artificial neural networks from a variety of connected and activation layers. Everything primarily utilizes the numpy library. No pytorch or tensorflow is used, but functions are compiled when possibloe using the numba library. This project was created for my understanding of neural networks.
 
 ### Network Classes
 
@@ -21,7 +21,7 @@ This library serves as a framework for creating artificial neural networks from 
 
 # Visualizations
 
-### Visualizing the training of 2 Compressers on a picture of the digit 3. 
+### Training of 3 Compressers with different activation functions on a picture of the digit 3.
 
 
 This is the original image that we would like our network to be able to transform into an image of higher resolution.
@@ -31,7 +31,7 @@ This is the original image that we would like our network to be able to transfor
 <img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/digit_3.png " width="150" height="150" />
 
 
-Images play in unison to show how different networks converge. The left image shows a compresser with 2 hidden connected layers and 2 hidden activation layers. Activation function used is the Leaky ReLu. The Right image is an identical network, but sigmoid activations are used. We can see here that the network using Leaky ReLu activations converges must faster.
+Images play in unison to show how different networks converge. All three images show identical networks with different activation functions. We can see that the leaky ReLu sppears to converge the fastest, but the model with a mix of leaky ReLu and sigmoidal activation layers is able to recreate the image most accurately.  
 
 &emsp;&emsp; Leaky ReLu &emsp;&emsp;&emsp;&emsp;&nbsp;  Sigmoid  &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;    Mixed
 
