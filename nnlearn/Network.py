@@ -101,7 +101,7 @@ class network:
         """
 
         for i in range(1,len(self.layers)):
-            assert self.layers[i-1].size == self.layers[i].prev_size, "invalid network"
+            assert self.layers[i-1].size == self.layers[i].prev_size, f"invalid network:\n   layer {i-1} size: {self.layers[i-1].size} \n   layer {i} prev size: {self.layers[i].prev_size}"
             
             
     def verify_sample(self, x, y):

@@ -28,7 +28,11 @@ class cross_entropy_loss(loss_function):
         # prediction = prediction.flatten()
         # target = target.flatten()
 
+        prediction = np.where(prediction == 0, .0001, prediction)
+        prediction = np.where(prediction == 1, .9999, prediction)
+
         return ((1 - target)/(1-prediction)) - (target / prediction )
+        
         
     def loss(self, prediction, target):
 
@@ -38,6 +42,9 @@ class cross_entropy_loss(loss_function):
         
         prediction = prediction.flatten()
         target = target.flatten()
+
+        prediction = np.where(prediction == 0, .0001, prediction)
+        prediction = np.where(prediction == 1, .9999, prediction)
 
         return -np.array((target * np.log(prediction)) + ((1-target)*np.log(1-prediction))).mean()
         

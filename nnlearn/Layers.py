@@ -103,12 +103,12 @@ class sigmoid_activation_layer(activation_layer):
 class input_layer:
     def __init__(self, size):
         self.size = size
-        self.prev_size = None
-        self.gradient_to_prev = None
+        self.prev_size = self.size
+        self.gradient_to_prev = np.diag(np.repeat(1, self.size))
         self.params = 0
         
     def gradient(self):
-        return None
+        return np.diag(np.repeat(1, self.size))
     
     #feeds sample to first fully connected layer
     def forward(self, x):
