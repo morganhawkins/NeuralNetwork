@@ -10,8 +10,8 @@ This library serves as a framework for creating artificial neural networks from 
 ### Layer Classes
 
 - Input Layer: accepts sample into network
-- Connected Layer: fully connected layer without any activation
-- Activation Layer: layer to add activations (Relu, Sigmoid, and Leaky ReLu)
+- Connected Layer: fully connected layer with no activation
+- Activation Layer: adds activations to previous layer (Relu, Sigmoid, and Leaky ReLu)
 
 ### Training Methods
 - Gradient Decent
