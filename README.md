@@ -31,7 +31,7 @@ This is the original image that we would like our network to be able to transfor
 <img src="https://github.com/morganhawkins/NeuralNetwork/blob/main/images/digit_3.png " width="150" height="150" />
 
 
-IAll three images show identical networks with different activation functions. 
+All three images show identical networks with different activation functions. 
 
 &emsp;&emsp; Leaky ReLu &emsp;&emsp;&emsp;&emsp;&nbsp;  Sigmoid  &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;    Mixed
 
